@@ -1,61 +1,50 @@
+<?php
+include "config/database.php";
+if (isset($_GET['prd_id'])) {
+    $sqlGetProduct = "SELECT * FROM product WHERE prd_id = " . $_GET['prd_id'];
+    $queryGetProduct = mysqli_query($conn, $sqlGetProduct);
+    $row = mysqli_fetch_assoc($queryGetProduct);
+} else {
+    header("Location: index.php");
+    exit();
+}
+?>
 <!--	List Product	-->
 <div id="product">
     <div id="product-head" class="row">
         <div id="product-img" class="col-lg-6 col-md-6 col-sm-12">
-            <img src="images/product/product-1.png">
+            <img src="images/product/<?php echo $row['prd_image']; ?>">
         </div>
         <div id="product-details" class="col-lg-6 col-md-6 col-sm-12">
-            <h1>iPhone X - 64GB Silver</h1>
+            <h1><?php echo $row['prd_name']; ?></h1>
             <ul>
-                <li><span>Bảo hành:</span> 12 Tháng</li>
-                <li><span>Đi kèm:</span> Hộp, sách, sạc, cáp, tai nghe</li>
-                <li><span>Tình trạng:</span> Máy Mới 100%</li>
-                <li><span>Khuyến Mại:</span> Dán Màn Hình 3 lớp</li>
+                <li><span>Bảo hành:</span> <?php echo $row['prd_warranty']; ?></li>
+                <li><span>Đi kèm:</span> <?php echo $row['prd_accessories']; ?></li>
+                <li><span>Tình trạng:</span> <?php echo $row['prd_new']; ?></li>
+                <li><span>Khuyến Mại:</span>
+                    <<?php echo $row['prd_promotion']; ?>< /li>
                 <li id="price">Giá Bán (chưa bao gồm VAT)</li>
-                <li id="price-number">22.990.000đ</li>
-                <li id="status">Còn hàng</li>
+                <li id="price-number"><?= number_format($row['prd_price'], 0, ',', '.') ?>đ</li>
+                <li id="status">
+                    <?php
+                    if ($row['prd_status'] == 1) {
+                        echo "<span class='text-success'>Còn hàng</span>";
+                    } else {
+                        echo "<span class='text-danger'>Hết hàng</span>";
+                    }
+                    ?>
+                </li>
             </ul>
-            <div id="add-cart"><a href="#">Mua ngay</a></div>
+            <div id="add-cart">
+                <a href="process_cart.php?action=add&prd_id=<?= $row['prd_id'] ?>">Thêm vào giỏ hàng</a>
+                <a href="index.php?page=cart">Mua ngay</a>
+            </div>
         </div>
     </div>
     <div id="product-body" class="row">
         <div class="col-lg-12 col-md-12 col-sm-12">
-            <h3>Đánh giá về iPhone X 64GB</h3>
-            <p>
-                Màn hình OLED có hỗ trợ HDR là một sự nâng cấp mới của Apple thay vì màn hình LCD
-                với IPS được tìm thấy trên iPhone 8 và iPhone 8 Plus đem đến tỉ lệ tương phản cao
-                hơn đáng kể là 1.000.000: 1, so với 1.300: 1 ( iPhone 8 Plus ) và 1.400: 1 ( iPhone
-                8 ).
-            </p>
-            <p>
-                Màn hình OLED mà Apple đang gọi màn hình Super Retina HD có thể hiển thị tông màu
-                đen sâu hơn. Điều này được thực hiện bằng cách tắt các điểm ảnh được hiển thị màu
-                đen còn màn hình LCD thông thường, những điểm ảnh đó được giữ lại. Không những thế,
-                màn hình OLED có thể tiết kiệm pin đáng kể.
-            </p>
-            <p>
-                Cả ba mẫu iPhone mới đều có camera sau 12MP và 7MP cho camera trước, nhưng chỉ
-                iPhone X và iPhone 8 Plus có thêm một cảm biến cho camera sau. Camera kép trên máy
-                như thường lệ: một góc rộng và một tele. Vậy Apple đã tích hợp những gì vào camera
-                của iPhone X?
-            </p>
-            <p>
-                Chống rung quang học (OIS) là một trong những tính năng được nhiều hãng điện thoại
-                trên thế giới áp dụng. Đối với iPhone X, hãng tích hợp chống rung này cho cả hai
-                camera, không như IPhone 8 Plus chỉ có OIS trên camera góc rộng nên camera tele vẫn
-                rung và chất lượng bức hình không đảm bảo.
-            </p>
-            <p>
-                Thứ hai, ống kính tele của iPhone 8 Plus có khẩu độ f / 2.8, trong khi iPhone X có
-                ống kính tele f / 2.2, tạo ra một đường cong nhẹ và có thể chụp thiếu sáng tốt hơn
-                với ống kính tele trên iPhone X.
-            </p>
-            <p>
-                Portrait Mode là tính năng chụp ảnh xóa phông trước đây chỉ có với camera sau của
-                iPhone 7 Plus, hiện được tích hợp trên cả iPhone 8 Plus và iPhone X. Tuy nhiên, nhờ
-                sức mạnh của cảm biến trên mặt trước của iPhone X, Camera TrueDepth cũng có thể chụp
-                với Potrait mode.
-            </p>
+            <h3>Đánh giá về <?php echo $row['prd_name']; ?></h3>
+            <?php echo $row['prd_details']; ?>
         </div>
     </div>
 
@@ -85,61 +74,57 @@
     <!--	Comments List	-->
     <div id="comments-list" class="row">
         <div class="col-lg-12 col-md-12 col-sm-12">
-            <div class="comment-item">
-                <ul>
-                    <li><b>Nguyễn Văn A</b></li>
-                    <li>2018-01-03 20:40:10</li>
-                    <li>
-                        <p>Kiểu dáng đẹp, cảm ứng rất nhạy, cầm trên tay cảm giác không bị cấn. Chụp
-                            ảnh tương đối nét, chơi game rất phê. Nếu giá mềm một chút thì sẽ bán
-                            khá chạy. Một sản phẩm tốt mà mọi người có thể cân nhắc.</p>
-                    </li>
-                </ul>
-            </div>
-            <div class="comment-item">
-                <ul>
-                    <li><b>Nguyễn Văn A</b></li>
-                    <li>2018-01-03 20:40:10</li>
-                    <li>
-                        <p>Kiểu dáng đẹp, cảm ứng rất nhạy, cầm trên tay cảm giác không bị cấn. Chụp
-                            ảnh tương đối nét, chơi game rất phê. Nếu giá mềm một chút thì sẽ bán
-                            khá chạy. Một sản phẩm tốt mà mọi người có thể cân nhắc.</p>
-                    </li>
-                </ul>
-            </div>
-            <div class="comment-item">
-                <ul>
-                    <li><b>Nguyễn Văn A</b></li>
-                    <li>2018-01-03 20:40:10</li>
-                    <li>
-                        <p>Kiểu dáng đẹp, cảm ứng rất nhạy, cầm trên tay cảm giác không bị cấn. Chụp
-                            ảnh tương đối nét, chơi game rất phê. Nếu giá mềm một chút thì sẽ bán
-                            khá chạy. Một sản phẩm tốt mà mọi người có thể cân nhắc.</p>
-                    </li>
-                </ul>
-            </div>
-            <div class="comment-item">
-                <ul>
-                    <li><b>Nguyễn Văn A</b></li>
-                    <li>2018-01-03 20:40:10</li>
-                    <li>
-                        <p>Kiểu dáng đẹp, cảm ứng rất nhạy, cầm trên tay cảm giác không bị cấn. Chụp
-                            ảnh tương đối nét, chơi game rất phê. Nếu giá mềm một chút thì sẽ bán
-                            khá chạy. Một sản phẩm tốt mà mọi người có thể cân nhắc.</p>
-                    </li>
-                </ul>
-            </div>
-            <div class="comment-item">
-                <ul>
-                    <li><b>Nguyễn Văn A</b></li>
-                    <li>2018-01-03 20:40:10</li>
-                    <li>
-                        <p>Kiểu dáng đẹp, cảm ứng rất nhạy, cầm trên tay cảm giác không bị cấn. Chụp
-                            ảnh tương đối nét, chơi game rất phê. Nếu giá mềm một chút thì sẽ bán
-                            khá chạy. Một sản phẩm tốt mà mọi người có thể cân nhắc.</p>
-                    </li>
-                </ul>
-            </div>
+            <?php
+            // Code to fetch and display comments
+            $totalComments = 0;
+            $sqlCountComments = "SELECT COUNT(*) AS total FROM comments WHERE prd_id = " . $_GET['prd_id'];
+            $queryCountComments = mysqli_query($conn, $sqlCountComments);
+            $resultCountComments = mysqli_fetch_assoc($queryCountComments);
+            $totalComments = $resultCountComments['total'];
+            $numberOfCommentsToShow = 5; // Số lượng bình luận muốn hiển thị
+            $totalPagesComments = ceil($totalComments / $numberOfCommentsToShow);
+            if ($totalComments > $numberOfCommentsToShow) {
+                echo "<p>Hiển thị $numberOfCommentsToShow trên tổng số $totalComments bình luận</p>";
+            } else {
+                echo "<p>Tổng số bình luận: $totalComments</p>";
+            }
+            if (isset($_GET['page_comment'])) {
+                $page_comment = $_GET['page_comment'];
+            } else {
+                $page_comment = 1;
+            }
+
+            if ($page_comment < 1) {
+                $page_comment = 1;
+            }
+            if ($page_comment > $totalPagesComments) {
+                $page_comment = $totalPagesComments;
+            }
+
+            $page_prev = $page_comment - 1;
+            if ($page_prev <= 0) {
+                $page_prev = 1;
+            }
+
+            $page_next = $page_comment + 1;
+            if ($page_next > $totalPagesComments) {
+                $page_next = $totalPagesComments;
+            }
+            $start = ($page_comment - 1) * $numberOfCommentsToShow;
+            $sqlGetComments = "SELECT * FROM comments WHERE prd_id = " . $_GET['prd_id'] . " ORDER BY comm_id DESC LIMIT $start, $numberOfCommentsToShow";
+            $queryGetComments = mysqli_query($conn, $sqlGetComments);
+            while ($row = mysqli_fetch_assoc($queryGetComments)) {
+            ?>
+                <div class="comment-item">
+                    <ul>
+                        <li><b><?php echo $row['comm_name']; ?></b></li>
+                        <li><?php echo $row['comm_date']; ?></li>
+                        <li>
+                            <p><?php echo $row['comm_details']; ?></p>
+                        </li>
+                    </ul>
+                </div>
+            <?php } ?>
         </div>
     </div>
     <!--	End Comments List	-->
@@ -147,11 +132,23 @@
 <!--	End Product	-->
 <div id="pagination">
     <ul class="pagination">
-        <li class="page-item"><a class="page-link" href="#">Trang trước</a></li>
-        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item"><a class="page-link" href="#">Trang sau</a></li>
+        <ul class="pagination">
+            <?php
+            echo '<li class="page-item"><a class="page-link" href="index.php?page_layout=product-detail&prd_id=' . $_GET['prd_id'] . '&page_comment=' . $page_prev . '">&laquo;</a></li>';
+            for ($i = 1; $i <= $totalPagesComments; $i++) {
+                $active = ($i == $page_comment) ? "active" : "";
+                $html = '<li class="page-item ' . $active . '">';
+                if ($i == $page_comment) {
+                    $html .= '<span class="page-link">' . $i . '</span>';
+                } else {
+                    $html .= '<a class="page-link" href="index.php?page_layout=product-detail&prd_id=' . $_GET['prd_id'] . '&page_comment=' . $i . '">' . $i . '</a>';
+                }
+                $html .= '</a></li>';
+                echo $html;
+            }
+            echo '<li class="page-item"><a class="page-link" href="index.php?page_layout=product-detail&prd_id=' . $_GET['prd_id'] . '&page_comment=' . $page_next . '">&raquo;</a></li>';
+            ?>
+        </ul>
     </ul>
 </div>
 <!--	End Product	-->

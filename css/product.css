@@ -43,6 +43,17 @@
 	padding:15px 20px;
 	color:#FFF;
 	text-decoration:none;}
+#add-cart a:first-child{
+	display:inline-table;
+	border-radius:3px;
+	border:1px solid #41fa63;
+	background:#41fa63;
+	padding:15px 20px;
+	color:#FFF;
+	text-decoration:none;}
+#add-cart a:first-child:hover{
+	color:#41fa63;
+	background:#FFF;}	
 #comment button{
 	background:#EB1F27;
 	border:none;}
@@ -64,10 +75,11 @@
 #pagination ul li a.page-link:hover{
 	background:#EB1F27;
 	color:#FFF;}
-#pagination ul li.active a{
+#pagination ul li.active span{
 	background:#EB1F27;
 	border-color:#dee2e6;
-	color:#FFF;}
+	color:#FFF;
+}
 
 
 
