@@ -4,7 +4,7 @@ include "config/database.php";
 if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
     $cart = $_SESSION['cart'];
     //chuyển mảng chứa id sản phẩm thành chuỗi phân cách bằng dấu phẩy
-    $prd_ids = implode(',', array_keys($cart));
+    $prd_ids = implode(',', array_keys($cart)); // [1,3,5] => "1,3,5"
     //lấy thông tin sản phẩm có id nằm trong chuỗi $prd_ids
     $sqlGetProductsInCart = "SELECT * FROM product WHERE prd_id IN ($prd_ids)";
     $queryGetProductsInCart = mysqli_query($conn, $sqlGetProductsInCart);
@@ -17,7 +17,7 @@ if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
             <div class="cart-nav-item col-lg-2 col-md-2 col-sm-12">Đơn giá</div>
             <div class="cart-nav-item col-lg-3 col-md-3 col-sm-12">Giá</div>
         </div>
-        <form method="post">
+        <form action="process_cart.php?action=update" method="post">
             <?php 
                 $total = 0;
                 while($row = mysqli_fetch_assoc($queryGetProductsInCart)) {
@@ -31,7 +31,7 @@ if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
                     </div>
 
                     <div class="cart-quantity col-lg-2 col-md-2 col-sm-12">
-                        <input type="number" id="quantity" class="form-control form-blue quantity" value="<?php echo $cart[$row['prd_id']]; ?>"
+                        <input type="number" id="quantity" name="quantity[<?php echo $row['prd_id']; ?>]" class="form-control form-blue quantity" value="<?php echo $cart[$row['prd_id']]; ?>"
                             min="1">
                     </div>
                     <div class="cart-price col-lg-2 col-md-2 col-sm-12">
@@ -45,7 +45,7 @@ if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
             <?php } ?>
             <div class="row">
                 <div class="cart-thumb col-lg-7 col-md-7 col-sm-12">
-                    <button id="update-cart" class="btn btn-success" type="submit" name="sbm">Cập nhật
+                    <button id="update-cart" class="btn btn-success" type="submit" name="sbm_cart_update">Cập nhật
                         giỏ hàng</button>
                 </div>
                 <div class="cart-total col-lg-2 col-md-2 col-sm-12"><b>Tổng cộng:</b></div>

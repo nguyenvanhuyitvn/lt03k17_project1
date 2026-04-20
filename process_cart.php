@@ -16,7 +16,14 @@ if(isset($_GET['action']) && $_GET['action'] == 'add') {
 }
 
 //Cập nhật thông tin giỏ hàng: action = update
-
+if(isset($_GET['action']) && $_GET['action'] == 'update') {
+    if(isset($_POST['sbm_cart_update'])) {
+        foreach($_POST['quantity'] as $prd_id => $quantity) {
+            $_SESSION['cart'][$prd_id] = $quantity;
+        }
+        header('Location: index.php?page=cart');
+    }
+}
 //Xóa sản phẩm khỏi giỏ hàng: action = delete
 
 ?>

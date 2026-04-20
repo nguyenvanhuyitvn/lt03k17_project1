@@ -142,6 +142,8 @@
                     break;
                 case 'orders': include_once 'modules/orders/orders.php';
                     break;
+                case 'order_detail': include_once 'modules/orders/order_detail.php';
+                    break;
                 default: header('Location: 404.php');
             }
         } else {
